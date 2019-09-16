@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/ablizniu/Documents/AbstractVM/inc/Error.h
+iostream
+-
+
+/Users/ablizniu/Documents/AbstractVM/inc/parser.h
+Error.h
+/Users/ablizniu/Documents/AbstractVM/inc/Error.h
+iostream
+-
+vector
+-
+map
+-
+
+/Users/ablizniu/Documents/AbstractVM/src/parser.cpp
+../inc/parser.h
+/Users/ablizniu/Documents/AbstractVM/inc/parser.h
+iostream
+-
+string
+-
+
