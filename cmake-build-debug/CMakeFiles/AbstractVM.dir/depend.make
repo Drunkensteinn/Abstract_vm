@@ -4,9 +4,6 @@
 CMakeFiles/AbstractVM.dir/src/Error.cpp.o: ../inc/Error.h
 CMakeFiles/AbstractVM.dir/src/Error.cpp.o: ../src/Error.cpp
 
-CMakeFiles/AbstractVM.dir/src/IOperands.cpp.o: ../inc/IOperands.h
-CMakeFiles/AbstractVM.dir/src/IOperands.cpp.o: ../src/IOperands.cpp
-
 CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/lexer.h
 CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../src/lexer.cpp
 

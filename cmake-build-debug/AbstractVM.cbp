@@ -97,9 +97,6 @@
 		<Unit filename="/Users/ablizniu/Documents/AbstractVM/src/Error.cpp">
 			<Option target="AbstractVM"/>
 		</Unit>
-		<Unit filename="/Users/ablizniu/Documents/AbstractVM/src/IOperands.cpp">
-			<Option target="AbstractVM"/>
-		</Unit>
 		<Unit filename="/Users/ablizniu/Documents/AbstractVM/src/lexer.cpp">
 			<Option target="AbstractVM"/>
 		</Unit>

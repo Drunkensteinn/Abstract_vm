@@ -6,13 +6,23 @@
 #define ABSTRACTVM_LEXER_H
 
 #include <iostream>
+#include <fstream>
+#include <istream>
 
-class lexer
+class Lexer
 {
-private:
-
 public:
 
+	Lexer();
+	~Lexer();
+
+	Lexer(Lexer const &l);
+	Lexer &operator=(Lexer const &l);
+
+	Lexer(int argc, char **argv);
+
+private:
+	FILE *file = NULL;
 };
 
 

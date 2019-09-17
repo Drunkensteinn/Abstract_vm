@@ -150,33 +150,6 @@ src/Error.cpp.s:
 	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/Error.cpp.s
 .PHONY : src/Error.cpp.s
 
-src/IOperands.o: src/IOperands.cpp.o
-
-.PHONY : src/IOperands.o
-
-# target to build an object file
-src/IOperands.cpp.o:
-	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/IOperands.cpp.o
-.PHONY : src/IOperands.cpp.o
-
-src/IOperands.i: src/IOperands.cpp.i
-
-.PHONY : src/IOperands.i
-
-# target to preprocess a source file
-src/IOperands.cpp.i:
-	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/IOperands.cpp.i
-.PHONY : src/IOperands.cpp.i
-
-src/IOperands.s: src/IOperands.cpp.s
-
-.PHONY : src/IOperands.s
-
-# target to generate assembly for a file
-src/IOperands.cpp.s:
-	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/IOperands.cpp.s
-.PHONY : src/IOperands.cpp.s
-
 src/lexer.o: src/lexer.cpp.o
 
 .PHONY : src/lexer.o
@@ -270,9 +243,6 @@ help:
 	@echo "... src/Error.o"
 	@echo "... src/Error.i"
 	@echo "... src/Error.s"
-	@echo "... src/IOperands.o"
-	@echo "... src/IOperands.i"
-	@echo "... src/IOperands.s"
 	@echo "... src/lexer.o"
 	@echo "... src/lexer.i"
 	@echo "... src/lexer.s"

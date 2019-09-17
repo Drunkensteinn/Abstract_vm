@@ -11,6 +11,7 @@ class Error:std::exception
 {
 public:
 	Error();
+	Error(const char *m);
 	Error(Error const &e);
 	Error &operator=(Error const &e);
 	virtual ~Error();
@@ -18,7 +19,6 @@ public:
 		return _error_msg.c_str();
 	}
 
-	void set_error_msg(const char *msg);
 
 private:
 	std::string _error_msg;

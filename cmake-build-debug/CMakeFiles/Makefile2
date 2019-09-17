@@ -71,7 +71,7 @@ CMAKE_BINARY_DIR = /Users/ablizniu/Documents/AbstractVM/cmake-build-debug
 CMakeFiles/AbstractVM.dir/all:
 	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/depend
 	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target AbstractVM"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target AbstractVM"
 .PHONY : CMakeFiles/AbstractVM.dir/all
 
 # Include target in all.
@@ -81,7 +81,7 @@ all: CMakeFiles/AbstractVM.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AbstractVM.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles 5
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/AbstractVM.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/AbstractVM.dir/rule

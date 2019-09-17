@@ -5,7 +5,7 @@
 
 
 
-int main()
+int main(int argc, char **argv)
 {
 	Parser *vm = new Parser;
 
@@ -15,5 +15,5 @@ int main()
 	catch(Error &e) {
 		std::cout <<  e.what() << std::endl;
 	}
-	return 0;
+	__attribute__((noreturn));
 }

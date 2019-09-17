@@ -6,6 +6,8 @@
 
 Error::Error() {}
 
+Error::Error(const char *m):_error_msg(m) {}
+
 Error::Error(Error const &e) {
 	_error_msg = e._error_msg;
 }
@@ -16,10 +18,6 @@ Error & Error::operator=(Error const &e) {
 	}
 
 	return *this;
-}
-
-void Error::set_error_msg(const char *msg){
-	this->_error_msg = std::string(msg);
 }
 
 Error::~Error()
