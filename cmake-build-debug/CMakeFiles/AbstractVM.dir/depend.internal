@@ -5,13 +5,22 @@ CMakeFiles/AbstractVM.dir/src/Error.cpp.o
  /Users/ablizniu/Documents/AbstractVM/inc/Error.h
  /Users/ablizniu/Documents/AbstractVM/src/Error.cpp
 CMakeFiles/AbstractVM.dir/src/lexer.cpp.o
+ /Users/ablizniu/Documents/AbstractVM/inc/Error.h
+ /Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
+ /Users/ablizniu/Documents/AbstractVM/inc/IOperands.h
+ /Users/ablizniu/Documents/AbstractVM/inc/IVm.h
  /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
  /Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
 CMakeFiles/AbstractVM.dir/src/main.cpp.o
  /Users/ablizniu/Documents/AbstractVM/inc/Error.h
+ /Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
+ /Users/ablizniu/Documents/AbstractVM/inc/IOperands.h
+ /Users/ablizniu/Documents/AbstractVM/inc/IVm.h
+ /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
  /Users/ablizniu/Documents/AbstractVM/inc/parser.h
  /Users/ablizniu/Documents/AbstractVM/src/main.cpp
 CMakeFiles/AbstractVM.dir/src/parser.cpp.o
  /Users/ablizniu/Documents/AbstractVM/inc/Error.h
+ /Users/ablizniu/Documents/AbstractVM/inc/IVm.h
  /Users/ablizniu/Documents/AbstractVM/inc/parser.h
  /Users/ablizniu/Documents/AbstractVM/src/parser.cpp

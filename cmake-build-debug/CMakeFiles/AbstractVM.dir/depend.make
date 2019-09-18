@@ -4,14 +4,23 @@
 CMakeFiles/AbstractVM.dir/src/Error.cpp.o: ../inc/Error.h
 CMakeFiles/AbstractVM.dir/src/Error.cpp.o: ../src/Error.cpp
 
+CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/Error.h
+CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/Error_messages.h
+CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/IOperands.h
+CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/IVm.h
 CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../inc/lexer.h
 CMakeFiles/AbstractVM.dir/src/lexer.cpp.o: ../src/lexer.cpp
 
 CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/Error.h
+CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/Error_messages.h
+CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/IOperands.h
+CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/IVm.h
+CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/lexer.h
 CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../inc/parser.h
 CMakeFiles/AbstractVM.dir/src/main.cpp.o: ../src/main.cpp
 
 CMakeFiles/AbstractVM.dir/src/parser.cpp.o: ../inc/Error.h
+CMakeFiles/AbstractVM.dir/src/parser.cpp.o: ../inc/IVm.h
 CMakeFiles/AbstractVM.dir/src/parser.cpp.o: ../inc/parser.h
 CMakeFiles/AbstractVM.dir/src/parser.cpp.o: ../src/parser.cpp
 

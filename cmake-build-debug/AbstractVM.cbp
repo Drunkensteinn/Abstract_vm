@@ -85,7 +85,13 @@
 		<Unit filename="/Users/ablizniu/Documents/AbstractVM/inc/Error.h">
 			<Option target="AbstractVM"/>
 		</Unit>
+		<Unit filename="/Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h">
+			<Option target="AbstractVM"/>
+		</Unit>
 		<Unit filename="/Users/ablizniu/Documents/AbstractVM/inc/IOperands.h">
+			<Option target="AbstractVM"/>
+		</Unit>
+		<Unit filename="/Users/ablizniu/Documents/AbstractVM/inc/IVm.h">
 			<Option target="AbstractVM"/>
 		</Unit>
 		<Unit filename="/Users/ablizniu/Documents/AbstractVM/inc/lexer.h">

@@ -9,23 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "../inc/IVm.h"
 
-enum _operations
-{
-	_push,
-	_pop,
-	_dump,
-	_assert,
-	_add,
-	_sub,
-	_mult,
-	_div,
-	_mod,
-	_print,
-	_exit
-};
 
-class Parser
+class Parser: public IVirtualMachine
 {
 public:
 	Parser();
@@ -33,7 +20,7 @@ public:
 	Parser(Parser const & p);
 	Parser & operator=(Parser const &p);
 
-	void execute(); /* here should be a ret type of lexer or core */
+	void execute();
 
 	std::string get_buff() const;
 	void		set_buff(std::string const & buff);
@@ -45,7 +32,7 @@ public:
 private:
 	std::string buff_;
 	std::vector<std::string> container_;
-	std::map<_operations, std::string> op_arr_;
+//	std::map<_operations, std::string> op_arr_;
 	Error error_manager_;
 };
 

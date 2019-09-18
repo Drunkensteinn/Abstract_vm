@@ -6,10 +6,31 @@
 #define ABSTRACTVM_LEXER_H
 
 #include <iostream>
+#include "IOperands.h"
+#include "IVm.h"
+#include "Error.h"
+#include "Error_messages.h"
+#include <string>
 #include <fstream>
-#include <istream>
+#include <map>
 
-class Lexer
+enum eOperations
+{
+	_push,
+	_pop,
+	_dump,
+	_assert,
+	_add,
+	_sub,
+	_mult,
+	_div,
+	_mod,
+	_print,
+	_exit,
+	_EOF
+};
+
+class Lexer: public IVirtualMachine
 {
 public:
 
@@ -21,8 +42,14 @@ public:
 
 	Lexer(int argc, char **argv);
 
+	void define_commands();
+	void define_operands();
+	void execute();
+
 private:
-	FILE *file = NULL;
+	std::map<eOperations, std::string> commands;
+	std::map<eOperandType , std::string> operands;
+	std::ifstream ifile;
 };
 
 

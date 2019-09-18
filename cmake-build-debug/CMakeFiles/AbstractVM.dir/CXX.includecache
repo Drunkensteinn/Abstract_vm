@@ -6,15 +6,39 @@
 
 #IncludeRegexTransform: 
 
+/Users/ablizniu/Documents/AbstractVM/inc/Error.h
+iostream
+-
+
+/Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
+
+/Users/ablizniu/Documents/AbstractVM/inc/IOperands.h
+iostream
+-
+
+/Users/ablizniu/Documents/AbstractVM/inc/IVm.h
+
 /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
 iostream
 -
+IOperands.h
+/Users/ablizniu/Documents/AbstractVM/inc/IOperands.h
+IVm.h
+/Users/ablizniu/Documents/AbstractVM/inc/IVm.h
+Error.h
+/Users/ablizniu/Documents/AbstractVM/inc/Error.h
+Error_messages.h
+/Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
+string
+-
 fstream
 -
-istream
+map
 -
 
 /Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
+sstream
+-
 ../inc/lexer.h
 /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
 
