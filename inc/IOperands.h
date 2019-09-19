@@ -13,7 +13,7 @@ enum eOperandType
 	Int16,
 	Int32,
 	Float,
-	Double
+	Double,
 };
 
 class IOperand {

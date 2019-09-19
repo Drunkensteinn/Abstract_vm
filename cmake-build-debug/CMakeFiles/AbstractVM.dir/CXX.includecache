@@ -33,12 +33,12 @@ string
 -
 fstream
 -
+sstream
+-
 map
 -
 
 /Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
-sstream
--
 ../inc/lexer.h
 /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
 

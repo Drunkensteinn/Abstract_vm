@@ -13,6 +13,7 @@ public:
 	Error();
 	Error(const char *m);
 	Error(Error const &e);
+	Error(std::string const & e);
 	Error &operator=(Error const &e);
 	virtual ~Error();
 	const char * what() const throw() {

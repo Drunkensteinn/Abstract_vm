@@ -12,10 +12,12 @@
 #include "Error_messages.h"
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <map>
 
 enum eOperations
 {
+	begin,
 	_push,
 	_pop,
 	_dump,
@@ -27,8 +29,16 @@ enum eOperations
 	_mod,
 	_print,
 	_exit,
-	_EOF
+	_Int8,
+	_Int16,
+	_Int32,
+	_Float,
+	_Double,
+	_EOF,
+	end,
+	count = 12,
 };
+
 
 class Lexer: public IVirtualMachine
 {
@@ -43,12 +53,13 @@ public:
 	Lexer(int argc, char **argv);
 
 	void define_commands();
-	void define_operands();
+
+
 	void execute();
 
 private:
 	std::map<eOperations, std::string> commands;
-	std::map<eOperandType , std::string> operands;
+	std::map<size_t, std::string, std::string, std::string> lexems;//create a vector of vectors
 	std::ifstream ifile;
 };
 

@@ -2,7 +2,6 @@
 // Created by Andrei BLIZNIUK on 2019-08-19.
 //
 
-#include <sstream>
 #include "../inc/lexer.h"
 
 
@@ -31,6 +30,7 @@ Lexer::Lexer(int argc, char **argv) {
 }
 
 void Lexer::define_commands() {
+	commands[begin] = "";
 	commands[_push] = "push";
 	commands[_pop] = "pop";
 	commands[_dump] = "dump";
@@ -42,36 +42,45 @@ void Lexer::define_commands() {
 	commands[_mod] = "mod";
 	commands[_print] = "print";
 	commands[_exit] = "exit";
+	commands[_Int8] = "int8";
+	commands[_Int16] = "int16";
+	commands[_Int32] = "int32";
+	commands[_Float] = "float";
+	commands[_Double] = "double";
 	commands[_EOF] = "";
-}
-
-void Lexer::define_operands() {
-	operands[Int8] = "Int8";
-	operands[Int16] = "Int16";
-	operands[Int32] = "Int32";
-	operands[Float] = "Float";
-	operands[Double] = "Double";
+	commands[end] = "\0";
 }
 
 void Lexer::execute() {
-	define_operands();
 	define_commands();
 	std::string line;
 	while (std::getline((ifile.is_open() ? (ifile) : (std::cin)), line))
 	{
-//		size_t operand_iter = Int8;
-//		size_t operations_iter = _push;
+		size_t pc = 1;
 		std::istringstream  StringStream(line);
 		std::string operation;
 		std::string operand;
-		bool compared = false;
+		bool compared_operation = false;
+		bool compared_operand = false;
+
 		if (!(StringStream >> operation >> operand))
-			break ;
-		for (size_t operation_iter = _push; operation_iter != _EOF; operation_iter++)
+			throw Error("Input Error: invalid input behavior");
+
+		for (size_t operation_iter = eOperations::begin; operation_iter != eOperations::end; operation_iter++)
 		{
-			std::cout << commands. << std::endl;
-//			if (commands)
-				compared = true;
+			eOperations it;
+
+			it = static_cast<eOperations>(operation_iter);
+			if (commands.at(it) == operation)
+				compared_operation = true;
+			if (commands.at(it) == operand.substr(0,operand.find("(")))
+				compared_operand = true;
 		}
+		if (not compared_operation)
+			throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) + std::string(": unknown instruction: ") + operation);
+		else if (not compared_operand)
+			throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
+//		else if (compared_operand and compared_operation)
+
 	}
 }
