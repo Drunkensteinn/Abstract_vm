@@ -14,6 +14,8 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <vector>
+#include <algorithm>
 
 enum eOperations
 {
@@ -39,7 +41,6 @@ enum eOperations
 	count = 12,
 };
 
-
 class Lexer: public IVirtualMachine
 {
 public:
@@ -54,12 +55,17 @@ public:
 
 	void define_commands();
 
+	void pack_lexems(size_t index, std::string command, std::string operand, std::string value);
 
-	void execute();
+	void validate_operand_arg(std::string const &operand, size_t pc);
+
+	void execute() final;
+
+
 
 private:
 	std::map<eOperations, std::string> commands;
-	std::map<size_t, std::string, std::string, std::string> lexems;//create a vector of vectors
+	std::vector<std::vector<std::string>> lexems;//create a vector of vectors
 	std::ifstream ifile;
 };
 

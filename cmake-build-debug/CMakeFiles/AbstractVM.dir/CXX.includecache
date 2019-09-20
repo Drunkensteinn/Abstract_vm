@@ -37,6 +37,10 @@ sstream
 -
 map
 -
+vector
+-
+algorithm
+-
 
 /Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
 ../inc/lexer.h

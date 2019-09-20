@@ -27,9 +27,9 @@ Parser & Parser::operator=(Parser const &p) {
 }
 
 void Parser::execute() {
-	std::getline(std::cin, buff_);// here is an entry point of parsing
+//	std::getline(std::cin, buff_);// here is an entry point of parsing
 
-	throw Error("fuck");
+//	throw Error("fuck");
 }
 
 

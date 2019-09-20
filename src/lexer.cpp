@@ -51,6 +51,25 @@ void Lexer::define_commands() {
 	commands[end] = "\0";
 }
 
+void Lexer::pack_lexems(size_t index, std::string command, std::string operand, std::string value) {
+    this->lexems.resize(index + 1);
+    this->lexems.at(index).push_back(command);
+    this->lexems.at(index).push_back(operand);
+    this->lexems.at(index).push_back(value);
+}
+
+void Lexer::validate_operand_arg(std::string const &operand, size_t pc) {
+    size_t n1;
+    size_t n2;
+
+    n1 = std::count(operand.begin(), operand.end(), ')');
+    n2 = std::count(operand.begin(), operand.end(), '(');
+
+    if (n1 > 1 or n2 > 1)
+        throw Error(std::string("Syntax error: Line: " + std::to_string(pc) + ": Operand ") +
+        operand + std::string(" has invalid argument format"));
+}
+
 void Lexer::execute() {
 	define_commands();
 	std::string line;
@@ -63,24 +82,35 @@ void Lexer::execute() {
 		bool compared_operation = false;
 		bool compared_operand = false;
 
-		if (!(StringStream >> operation >> operand))
-			throw Error("Input Error: invalid input behavior");
+        StringStream >> operation >> operand;
+		if (operation == ";;") {
+            break ;
+        }
+		else {
+            if (operation.find(";") != std::string::npos)
+                continue;
 
-		for (size_t operation_iter = eOperations::begin; operation_iter != eOperations::end; operation_iter++)
-		{
-			eOperations it;
+            for (size_t _iter = eOperations::begin; _iter != eOperations::end; _iter++) {
+                eOperations it;
 
-			it = static_cast<eOperations>(operation_iter);
-			if (commands.at(it) == operation)
-				compared_operation = true;
-			if (commands.at(it) == operand.substr(0,operand.find("(")))
-				compared_operand = true;
-		}
-		if (not compared_operation)
-			throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) + std::string(": unknown instruction: ") + operation);
-		else if (not compared_operand)
-			throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
-//		else if (compared_operand and compared_operation)
-
+                it = static_cast<eOperations>(_iter);
+                if (commands.at(it) == operation)
+                    compared_operation = true;
+                if (commands.at(it) == operand.substr(0, operand.find("(")))
+                {
+                    validate_operand_arg(operand, pc);
+                    compared_operand = true;
+                }
+            }
+            if (not compared_operation)
+                throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) +
+                            std::string(": unknown instruction: ") + operation);
+            else if (not compared_operand)
+                throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) +
+                            std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
+            else
+                pack_lexems(pc - 1, operation, operand.substr(0, operand.find("(")),
+                            operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1));
+        }
 	}
 }
