@@ -17,7 +17,7 @@
 #include <vector>
 #include <algorithm>
 
-enum eOperations
+enum eLexems
 {
 	begin,
 	_push,
@@ -59,12 +59,12 @@ public:
 
 	void validate_operand_arg(std::string const &operand, size_t pc);
 
+	std::vector<std::vector<std::string>> const get_lexems() const;
+
 	void execute() final;
 
-
-
 private:
-	std::map<eOperations, std::string> commands;
+	std::map<eLexems, std::string> commands;
 	std::vector<std::vector<std::string>> lexems;//create a vector of vectors
 	std::ifstream ifile;
 };

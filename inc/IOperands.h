@@ -7,9 +7,11 @@
 
 #include <iostream>
 
+const std::string string_type_[5] = {"int8", "int16", "int32", "float", "double"};
+
 enum eOperandType
 {
-	Int8,
+    Int8,
 	Int16,
 	Int32,
 	Float,
@@ -29,13 +31,16 @@ public:
 	virtual ~IOperand( void ) {}
 };
 
-template <typename T>
-class CreataeOperands : public IOperand
+
+class CreateOperands : public IOperand
 {
 public:
+
+    eOperandType get_type(void) const;
 
 private:
 	std::string type_;
 };
+
 
 #endif //ABSTRACTVM_IOPERANDS_H

@@ -10,10 +10,14 @@ Lexer::Lexer() {}
 Lexer::~Lexer() {}
 
 Lexer::Lexer(Lexer const &l) {
+    commands = l.commands;
+    lexems = l.lexems;
 }
 
 Lexer& Lexer::operator=(Lexer const &l) {
 	if (this != &l) {
+        commands = l.commands;
+        lexems = l.lexems;
 	}
 	return *this;
 }
@@ -51,6 +55,10 @@ void Lexer::define_commands() {
 	commands[end] = "\0";
 }
 
+std::vector<std::vector<std::string>> const Lexer::get_lexems() const {
+    return this->lexems;
+}
+
 void Lexer::pack_lexems(size_t index, std::string command, std::string operand, std::string value) {
     this->lexems.resize(index + 1);
     this->lexems.at(index).push_back(command);
@@ -73,9 +81,9 @@ void Lexer::validate_operand_arg(std::string const &operand, size_t pc) {
 void Lexer::execute() {
 	define_commands();
 	std::string line;
+    size_t pc = 1;
 	while (std::getline((ifile.is_open() ? (ifile) : (std::cin)), line))
 	{
-		size_t pc = 1;
 		std::istringstream  StringStream(line);
 		std::string operation;
 		std::string operand;
@@ -90,10 +98,10 @@ void Lexer::execute() {
             if (operation.find(";") != std::string::npos)
                 continue;
 
-            for (size_t _iter = eOperations::begin; _iter != eOperations::end; _iter++) {
-                eOperations it;
+            for (size_t _iter = eLexems::begin; _iter != eLexems::end; _iter++) {
+                eLexems it;
 
-                it = static_cast<eOperations>(_iter);
+                it = static_cast<eLexems>(_iter);
                 if (commands.at(it) == operation)
                     compared_operation = true;
                 if (commands.at(it) == operand.substr(0, operand.find("(")))
@@ -112,5 +120,6 @@ void Lexer::execute() {
                 pack_lexems(pc - 1, operation, operand.substr(0, operand.find("(")),
                             operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1));
         }
+		pc++;
 	}
 }

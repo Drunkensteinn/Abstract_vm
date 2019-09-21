@@ -7,44 +7,25 @@
 #include <string>
 
 
-Parser::Parser() {
-}
+Parser::Parser() {}
 
 Parser::~Parser() {}
 
+Parser::Parser(std::vector<std::vector<std::string>> const &l): container_(l) {}
+
 Parser::Parser(Parser const &p) {
-		this->buff_ = p.buff_;
-		this->error_manager_ = p.error_manager_;
+    container_ = p.container_;
 }
 
 Parser & Parser::operator=(Parser const &p) {
-	if (this != &p)
-	{
-		this->buff_ = p.buff_;
-		this->error_manager_ = p.error_manager_;
+	if (this != &p) {
+	    container_ = p.container_;
 	}
+
 	return *this;
 }
 
 void Parser::execute() {
-//	std::getline(std::cin, buff_);// here is an entry point of parsing
 
-//	throw Error("fuck");
 }
 
-
-std::string Parser::get_buff() const {
-	return this->buff_;
-}
-
-void Parser::set_buff(std::string const & buff) {
-	this->buff_ = buff;
-}
-
-Error const & Parser::get_error_manager() const {
-	return (this->error_manager_);
-}
-
-void Parser::set_error_manager(Error const & error_operator) {
-	this->error_manager_ = error_operator;
-}
