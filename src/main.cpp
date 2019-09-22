@@ -6,16 +6,20 @@
 
 void execute(IVirtualMachine *m)
 {
-    try { m->execute(); }
-    catch (Error &e) {
-        std::cout <<  e.what() << std::endl;
-        exit(0);
-    }
+	try { m->execute(); }
+	catch (Error &e) {
+		std::cout <<  e.what() << std::endl;
+		exit(0);
+	}
 }
 
 int main(int argc, char **argv)
 {
-    IVirtualMachine *lexer = new Lexer(argc, argv);
+	int a = 0;
+
+	std::cout << typeid(a).name() << std::endl;
+
+	IVirtualMachine *lexer = new Lexer(argc, argv);
 	execute(lexer);
 
 	IVirtualMachine *parser = new Parser(dynamic_cast<Lexer *>(lexer)->get_lexems());
