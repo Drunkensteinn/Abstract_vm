@@ -35,17 +35,17 @@ Lexer::Lexer(int argc, char **argv) {
 
 void Lexer::define_commands() {
 	commands[begin] = "";
-	commands[_push] = "push";
-	commands[_pop] = "pop";
-	commands[_dump] = "dump";
-	commands[_assert] = "assert";
-	commands[_add] = "add";
-	commands[_sub] = "subb";
-	commands[_mult] = "mult";
-	commands[_div] = "div";
-	commands[_mod] = "mod";
-	commands[_print] = "print";
-	commands[_exit] = "exit";
+	commands[_PUSH] = "push";
+	commands[_POP] = "pop";
+	commands[_DUMP] = "dump";
+	commands[_ASSERT] = "assert";
+	commands[_ADD] = "add";
+	commands[_SUB] = "subb";
+	commands[_MULT] = "mult";
+	commands[_DIV] = "div";
+	commands[_MOD] = "mod";
+	commands[_PRINT] = "print";
+	commands[_EXIT] = "exit";
 	commands[_Int8] = "int8";
 	commands[_Int16] = "int16";
 	commands[_Int32] = "int32";

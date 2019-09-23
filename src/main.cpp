@@ -1,8 +1,10 @@
 #include <iostream>
 #include <bootstrap.h>
+#include <boost/lexical_cast.hpp>
 #include "../inc/Error.h"
 #include "../inc/parser.h"
 #include "../inc/lexer.h"
+
 
 void execute(IVirtualMachine *m)
 {
@@ -15,9 +17,12 @@ void execute(IVirtualMachine *m)
 
 int main(int argc, char **argv)
 {
-	int a = 0;
 
-	std::cout << typeid(a).name() << std::endl;
+
+	try {
+		Operand<int8_t> op(std::string("255"), Int8, 0);
+		std::cout << op << std::endl;}
+	catch (Error & e) { std::cout << e.what() << std::endl;}
 
 	IVirtualMachine *lexer = new Lexer(argc, argv);
 	execute(lexer);
