@@ -6505,6 +6505,12 @@ Error.h
 /Users/ablizniu/Documents/AbstractVM/inc/Error.h
 boost/lexical_cast.hpp
 -
+iomanip
+-
+sstream
+-
+string
+-
 
 /Users/ablizniu/Documents/AbstractVM/inc/IVm.h
 

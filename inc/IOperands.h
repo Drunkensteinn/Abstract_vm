@@ -9,6 +9,9 @@
 
 #include "Error.h"
 #include <boost/lexical_cast.hpp>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 static const char * str_repr[5] = {"Int8", "Int16", "Int32", "Float", "Double"};
 
@@ -41,26 +44,21 @@ public:
 	Operand(std::string const & v, eOperandType type, size_t precision): _type(type), _precision(precision) {
 		try {
 			if (_type >= Float)
-				floated_point_value(v);
+			{
+				long double v_ = boost::lexical_cast<long double >(v);
+				overflow<T, long double>(v_);
+			}
 			else
 			{
 				if (_type <= Int8)
 				{
 					int32_t v_ = boost::lexical_cast<int32_t>(v);
-
-					if (v_	> static_cast<int32_t>(std::numeric_limits<char>::max()) or
-						v_	< static_cast<int32_t>(std::numeric_limits<char>::min()))
-						throw Error(std::string("Error: Overflowing operand ") + _str_repr);
-					_value = static_cast<int8_t>(v_);
+					overflow<int8_t, int32_t>(v_);
 				}
 				else
 				{
 					int64_t v_ = boost::lexical_cast<int64_t>(v);
-
-					if (v_  > static_cast<T>(std::numeric_limits<T>::max()) or
-						v_  < static_cast<T>(std::numeric_limits<T>::min()))
-						throw Error(std::string("Error: Overflowing operand ") + _str_repr);
-					_value = static_cast<T>(v_);
+					overflow<T, int64_t>(v_);
 				}
 			}
 		}
@@ -68,19 +66,25 @@ public:
 			throw Error(std::string("Error: unknown error"));
 		}
 	}
-
-	void floated_point_value(std::string v)
-	{
-
+	template <typename U, typename Z>
+	void overflow(Z v_)								{
+		if (v_  > static_cast<U>(std::numeric_limits<U>::max()) or
+			v_  < static_cast<U>(std::numeric_limits<U>::min()))
+			throw Error(std::string("Error: Overflowing operand ") + _operand);
+		_value = static_cast<U>(v_);
 	}
 
+	std::string const & toString(void) const 		{
+		std::stringstream s(std::stringstream::out);
 
-	std::string const & toString(void) const 		{ return this->_str_repr; }
+		s << std::setprecision(_precision) << _value;
+		_str_value = s.str();
+	}
+
+	std::string const & getOperand(void) const 		{ return this->_operand; }
 	int 				getPrecision( void ) const 	{ return this->_precision; }
 	eOperandType		getType(void) const 		{ return this->_type; }
 	T const &			get_value(void) const 		{ return this->_value; }
-
-
 
 //	IOperand const * operator+(IOperand const & rhs);
 //	IOperand const * operator-(IOperand const & rhs);
@@ -91,7 +95,8 @@ public:
 	~Operand() {};
 private:
 	eOperandType	_type;
-	std::string		_str_repr = str_repr[_type];
+	std::string		_operand = str_repr[_type];
+	std::string		_str_value;
 	T				_value;
 	size_t			_precision;
 };
@@ -99,7 +104,7 @@ private:
 template <typename T>
 std::ostream &operator<<(std::ostream &stream, Operand<T> const &op)
 {
-	stream << "The value is  - " << op.get_value();
+	stream << "The value is  - " << static_cast<T>(op.get_value());
 	return stream;
 }
 

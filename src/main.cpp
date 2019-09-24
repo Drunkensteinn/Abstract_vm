@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
 
 	try {
-		Operand<int8_t> op(std::string("255"), Int8, 0);
+		Operand<float> op(std::string("127.12"), Float, 5);
 		std::cout << op << std::endl;}
 	catch (Error & e) { std::cout << e.what() << std::endl;}
 
