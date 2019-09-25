@@ -150,6 +150,33 @@ src/Error.cpp.s:
 	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/Error.cpp.s
 .PHONY : src/Error.cpp.s
 
+src/FabricMethod.o: src/FabricMethod.cpp.o
+
+.PHONY : src/FabricMethod.o
+
+# target to build an object file
+src/FabricMethod.cpp.o:
+	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o
+.PHONY : src/FabricMethod.cpp.o
+
+src/FabricMethod.i: src/FabricMethod.cpp.i
+
+.PHONY : src/FabricMethod.i
+
+# target to preprocess a source file
+src/FabricMethod.cpp.i:
+	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.i
+.PHONY : src/FabricMethod.cpp.i
+
+src/FabricMethod.s: src/FabricMethod.cpp.s
+
+.PHONY : src/FabricMethod.s
+
+# target to generate assembly for a file
+src/FabricMethod.cpp.s:
+	$(MAKE) -f CMakeFiles/AbstractVM.dir/build.make CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.s
+.PHONY : src/FabricMethod.cpp.s
+
 src/lexer.o: src/lexer.cpp.o
 
 .PHONY : src/lexer.o
@@ -243,6 +270,9 @@ help:
 	@echo "... src/Error.o"
 	@echo "... src/Error.i"
 	@echo "... src/Error.s"
+	@echo "... src/FabricMethod.o"
+	@echo "... src/FabricMethod.i"
+	@echo "... src/FabricMethod.s"
 	@echo "... src/lexer.o"
 	@echo "... src/lexer.i"
 	@echo "... src/lexer.s"

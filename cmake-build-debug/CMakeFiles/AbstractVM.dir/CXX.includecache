@@ -6550,6 +6550,10 @@ map
 ../inc/IVm.h
 /Users/ablizniu/Documents/AbstractVM/inc/IVm.h
 
+/Users/ablizniu/Documents/AbstractVM/src/FabricMethod.cpp
+../inc/IOperands.h
+/Users/ablizniu/Documents/AbstractVM/inc/IOperands.h
+
 /Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
 ../inc/lexer.h
 /Users/ablizniu/Documents/AbstractVM/inc/lexer.h

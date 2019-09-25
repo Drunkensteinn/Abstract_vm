@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ablizniu/Documents/AbstractVM/src/Error.cpp" "/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles/AbstractVM.dir/src/Error.cpp.o"
+  "/Users/ablizniu/Documents/AbstractVM/src/FabricMethod.cpp" "/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o"
   "/Users/ablizniu/Documents/AbstractVM/src/lexer.cpp" "/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles/AbstractVM.dir/src/lexer.cpp.o"
   "/Users/ablizniu/Documents/AbstractVM/src/main.cpp" "/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles/AbstractVM.dir/src/main.cpp.o"
   "/Users/ablizniu/Documents/AbstractVM/src/parser.cpp" "/Users/ablizniu/Documents/AbstractVM/cmake-build-debug/CMakeFiles/AbstractVM.dir/src/parser.cpp.o"

@@ -28,19 +28,20 @@ class IOperand {
 public:
 	virtual int getPrecision( void ) const = 0; // Precision of the type of the instance
 	virtual eOperandType getType( void ) const = 0; // Type of the instance
-//	virtual IOperand const * operator+(IOperand const & rhs) const = 0; // Sum
-//	virtual IOperand const * operator-(IOperand const & rhs) const = 0; // Difference
-//	virtual IOperand const * operator*(IOperand const & rhs) const = 0; // Product
-//	virtual IOperand const * operator/(IOperand const & rhs) const = 0; // Quotient
-//	virtual IOperand const * operator%(IOperand const & rhs) const = 0; // Modulo
+	virtual IOperand const * operator+(IOperand const & rhs) const = 0; // Sum
+	virtual IOperand const * operator-(IOperand const & rhs) const = 0; // Difference
+	virtual IOperand const * operator*(IOperand const & rhs) const = 0; // Product
+	virtual IOperand const * operator/(IOperand const & rhs) const = 0; // Quotient
+	virtual IOperand const * operator%(IOperand const & rhs) const = 0; // Modulo
 	virtual std::string const & toString(void) const = 0; // String representation of the instance
 	virtual ~IOperand( void ) {}
 };
 
 template <typename T>
-class Operand:IOperand
+class Operand:public IOperand
 {
 public:
+	Operand () {}
 	Operand(std::string const & v, eOperandType type, size_t precision): _type(type), _precision(precision) {
 		try {
 			if (_type >= Float)
@@ -78,7 +79,7 @@ public:
 		std::stringstream s(std::stringstream::out);
 
 		s << std::setprecision(_precision) << _value;
-		_str_value = s.str();
+		_str_value = s;
 	}
 
 	std::string const & getOperand(void) const 		{ return this->_operand; }
@@ -86,11 +87,25 @@ public:
 	eOperandType		getType(void) const 		{ return this->_type; }
 	T const &			get_value(void) const 		{ return this->_value; }
 
-//	IOperand const * operator+(IOperand const & rhs);
-//	IOperand const * operator-(IOperand const & rhs);
-//	IOperand const * operator*(IOperand const & rhs);
-//	IOperand const * operator/(IOperand const & rhs);
-//	IOperand const * operator%(IOperand const & rhs);
+	IOperand const * operator+(IOperand const & rhs) const	{
+		if (rhs.getPrecision() >= this->_precision)
+		{
+
+		}
+		return (nullptr);
+	}
+	IOperand const * operator-(IOperand const & rhs) const	{
+		return (nullptr);
+	}
+	IOperand const * operator*(IOperand const & rhs) const	{
+		return (nullptr);
+	}
+	IOperand const * operator/(IOperand const & rhs) const	{
+		return (nullptr);
+	}
+	IOperand const * operator%(IOperand const & rhs) const	{
+		return (nullptr);
+	}
 
 	~Operand() {};
 private:
@@ -108,19 +123,23 @@ std::ostream &operator<<(std::ostream &stream, Operand<T> const &op)
 	return stream;
 }
 
-
-
 class CreateOperands
 {
 public:
+	CreateOperands();
+	~CreateOperands();
+	CreateOperands(CreateOperands const & c);
+	CreateOperands &operator=(CreateOperands const &r);
 
 	IOperand const * createOperand(eOperandType type, std::string const & value) const;
 
 private:
-	std::string type_;
+	eOperandType	type_;
+	std::string		_value;
+	std::vector<(IOperand *)f()> factory;
 
 	IOperand const * createInt8(std::string const & value) const;
-	IOperand const * createInt16(std::string const & value) const;
+	IOperand const * createInt16(std::string c	onst & value) const;
 	IOperand const * createInt32(std::string const & value) const;
 	IOperand const * createFloat(std::string const & value) const;
 	IOperand const * createDouble(std::string const & value) const;
