@@ -37,12 +37,14 @@ public:
 	virtual ~IOperand( void ) {}
 };
 
+class CreateOperands;
+
 template <typename T>
 class Operand:public IOperand
 {
 public:
 	Operand () {}
-	Operand(std::string const & v, eOperandType type, size_t precision): _type(type), _precision(precision) {
+	Operand(std::string const & v, eOperandType type, size_t precision, const CreateOperands * factory): _type(type), _precision(precision), _factory(factory) {
 		try {
 			if (_type >= Float)
 			{
@@ -75,11 +77,36 @@ public:
 		_value = static_cast<U>(v_);
 	}
 
-	std::string const & toString(void) const 		{
-		std::stringstream s(std::stringstream::out);
+	long double const return_operands_floated_point(IOperand const &op) const
+	{
+		long double v_ = 0;
+		try {
+			std::string  a = op.toString();
+//			long double v_ = std::stold(op.toString());
+		}
+		catch (boost::bad_lexical_cast &e)
+		{throw Error(std::string("Error: overflowed value"));}
+		return (v_);
+	}
 
-		s << std::setprecision(_precision) << _value;
-		_str_value = s;
+	int64_t const return_operands_fixed_point(IOperand const &op) const
+	{
+		int64_t v_ = 0;
+		try {
+			int64_t v_ = boost::lexical_cast<int64_t>(op.toString());
+		}
+		catch (boost::bad_lexical_cast &e)
+		{throw Error(std::string("Error: overflowed value"));}
+		return (v_);
+	}
+
+	std::string const & toString(void) const 		{
+		std::stringstream stream;
+		std::string res;
+
+		stream << std::fixed << std::setprecision(_precision) << this->_value;
+		res = stream.str();
+		return std::move(res);
 	}
 
 	std::string const & getOperand(void) const 		{ return this->_operand; }
@@ -88,11 +115,27 @@ public:
 	T const &			get_value(void) const 		{ return this->_value; }
 
 	IOperand const * operator+(IOperand const & rhs) const	{
+		const IOperand * ptr = nullptr;
+		std::string _value_;
+		eOperandType _type_;
+
 		if (rhs.getPrecision() >= this->_precision)
 		{
-
+			if (rhs.getType() >= Float)
+				_value_ = std::to_string(this->return_operands_floated_point(rhs) + this->return_operands_floated_point(*this));
+			else if (rhs.getType() < Float and rhs.getType() >= Int8)
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs) + this->return_operands_fixed_point(*this));
+			_type_ = rhs.getType();
 		}
-		return (nullptr);
+		else if (rhs.getPrecision() < this->_precision)
+		{
+			if (this->getType() >= Float)
+				_value_ = std::to_string(this->return_operands_floated_point(rhs) + this->return_operands_floated_point(*this));
+			else if (this->getType() < Float and this->getType() >= Int8)
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs) + this->return_operands_fixed_point(*this));
+			_type_ = this->getType();
+		}
+		return (this->_factory->createOperand(_type_, _value_));
 	}
 	IOperand const * operator-(IOperand const & rhs) const	{
 		return (nullptr);
@@ -109,11 +152,12 @@ public:
 
 	~Operand() {};
 private:
-	eOperandType	_type;
-	std::string		_operand = str_repr[_type];
-	std::string		_str_value;
-	T				_value;
-	size_t			_precision;
+	eOperandType			_type;
+	std::string				_operand = str_repr[_type];
+	std::string				_str_value;
+	T						_value;
+	size_t					_precision;
+	const CreateOperands	*_factory;
 };
 
 template <typename T>
@@ -135,11 +179,10 @@ public:
 
 private:
 	eOperandType	type_;
-	std::string		_value;
-	std::vector<(IOperand *)f()> factory;
+	std::vector<IOperand const *(CreateOperands::*)(std::string const &) const> factory;
 
 	IOperand const * createInt8(std::string const & value) const;
-	IOperand const * createInt16(std::string c	onst & value) const;
+	IOperand const * createInt16(std::string const & value) const;
 	IOperand const * createInt32(std::string const & value) const;
 	IOperand const * createFloat(std::string const & value) const;
 	IOperand const * createDouble(std::string const & value) const;

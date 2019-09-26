@@ -17,9 +17,12 @@ void execute(IVirtualMachine *m)
 
 int main(int argc, char **argv)
 {
+	CreateOperands *factory = new CreateOperands;
+
 	try {
-		Operand<float> op(std::string("127.12"), Float, 5);
-		std::cout << op << std::endl;}
+		Operand<double> op(std::string("127.1212312312312"), Double, 7, factory);
+		Operand<float> op1(std::string("127.12"), Float, 5, factory);
+		std::cout << op + op1 << std::endl;}
 	catch (Error & e) { std::cout << e.what() << std::endl; }
 
 	IVirtualMachine *lexer = new Lexer(argc, argv);
