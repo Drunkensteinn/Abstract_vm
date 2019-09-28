@@ -17,12 +17,14 @@ CreateOperands &CreateOperands::operator=(CreateOperands const &r) {
 	if (this != &r)
 	{
 		this->type_ = r.type_;
+		this->factory = r.factory;
 	}
 	return (*this);
 }
 
 CreateOperands::CreateOperands(CreateOperands const &c) {
 	this->type_ = c.type_;
+	this->factory = c.factory;
 }
 
 IOperand const *CreateOperands::createOperand(eOperandType type, std::string const &value) const {

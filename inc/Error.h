@@ -1,7 +1,3 @@
-//
-// Created by Andrei BLIZNIUK on 2019-09-16.
-//
-
 #ifndef ABSTRACTVM_ERROR_H
 #define ABSTRACTVM_ERROR_H
 
@@ -19,8 +15,6 @@ public:
 	const char * what() const throw() {
 		return _error_msg.c_str();
 	}
-
-
 private:
 	std::string _error_msg;
 };

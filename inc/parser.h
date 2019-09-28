@@ -1,15 +1,13 @@
-//
-// Created by Andrei BLIZNIUK on 2019-08-19.
-//
-
 #ifndef ABSTRACTVM_PARSER_H
 #define ABSTRACTVM_PARSER_H
 
 #include "Error.h"
 #include <iostream>
+#include <stack>
 #include <vector>
 #include <map>
 #include "../inc/IVm.h"
+#include "../inc/IOperands.h"
 
 
 class Parser: public IVirtualMachine
@@ -28,6 +26,7 @@ public:
 
 
 private:
+	const CreateOperands *_factory_ = nullptr;
 	std::vector<std::vector<std::string>> container_;
 };
 
