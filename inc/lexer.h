@@ -55,6 +55,8 @@ public:
 
 	void define_commands();
 
+	const std::map<eLexems, std::string> get_commands(void) const;
+
 	void pack_lexems(size_t index, std::string command, std::string operand, std::string value);
 
 	void validate_operand_arg(std::string const &operand, size_t pc);

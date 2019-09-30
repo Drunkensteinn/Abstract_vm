@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	IVirtualMachine *lexer = new Lexer(argc, argv);
 	execute(lexer);
 
-	IVirtualMachine *parser = new Parser(dynamic_cast<Lexer *>(lexer)->get_lexems());
+	IVirtualMachine *parser = new Parser(lexer);
 	execute(parser);
 	return (0);
 }

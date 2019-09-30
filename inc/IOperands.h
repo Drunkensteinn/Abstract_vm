@@ -233,6 +233,8 @@ public:
 										 this->return_operands_fixed_point(this->toString()));
 				_type_ = rhs.getType();
 			}
+			else if (rhs.getType() >= Float)
+				throw Error("Mod instruction on floated point value");
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
@@ -242,6 +244,8 @@ public:
 						this->return_operands_fixed_point(this->toString()));
 				_type_ = this->getType();
 			}
+			else if (this->getType() >= Float)
+				throw Error("Mod instruction on floated point value");
 		}
 		return (this->_factory->createOperand(_type_, _value_));
 	}

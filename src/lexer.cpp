@@ -40,7 +40,7 @@ void Lexer::define_commands() {
 	commands[_DUMP] = "dump";
 	commands[_ASSERT] = "assert";
 	commands[_ADD] = "add";
-	commands[_SUB] = "subb";
+	commands[_SUB] = "sub";
 	commands[_MULT] = "mult";
 	commands[_DIV] = "div";
 	commands[_MOD] = "mod";
@@ -57,6 +57,10 @@ void Lexer::define_commands() {
 
 std::vector<std::vector<std::string>> const Lexer::get_lexems() const {
     return this->lexems;
+}
+
+const std::map<eLexems, std::string> Lexer::get_commands(void) const {
+	return (this->commands);
 }
 
 void Lexer::pack_lexems(size_t index, std::string command, std::string operand, std::string value) {
