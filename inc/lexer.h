@@ -26,7 +26,7 @@ enum eLexems
 	_ASSERT,
 	_ADD,
 	_SUB,
-	_MULT,
+	_MUL,
 	_DIV,
 	_MOD,
 	_PRINT,

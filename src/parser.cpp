@@ -32,6 +32,15 @@ Parser & Parser::operator=(Parser const &p) {
 	return *this;
 }
 
+bool Parser::findExitInstruction() {
+	size_t _size_ = this->container_.size();
+	for (size_t i = 0; i < _size_; i++) {
+		if (this->container_.at(i)[COMMAND] == "exit")
+			return true;
+	}
+	return false;
+}
+
 eOperandType Parser::defineType(std::string const &s)
 {
 	if (s == this->_commands_[_Int8])
@@ -49,6 +58,7 @@ eOperandType Parser::defineType(std::string const &s)
 }
 
 void Parser::op_exit() const {
+	::system("leaks AbstractVM");
 	::exit(0);
 }
 
@@ -70,13 +80,12 @@ void Parser::op_dump() const {
 	}
 }
 
-
 void Parser::op_assert(std::string const &s) {
 	long double l1;
 	long double l2;
 
 	l1 = boost::lexical_cast<long double>(s);
-	l2 = boost::lexical_cast<long double>(this->_stack_.at(0));
+	l2 = boost::lexical_cast<long double>(this->_stack_.at(0)->toString());
 
 	if (l1 != l2)
 		throw Error("Error: assert failed");
@@ -94,6 +103,8 @@ void Parser::op_add() {
 		this->_stack_.pop_front();
 		res = *p1 + *p2;
 		this->_stack_.push_front(res);
+		delete(p1);
+		delete(p2);
 	}
 	else
 		throw Error("Add instruction on empty stack");
@@ -112,6 +123,8 @@ void Parser::op_sub() {
 		this->_stack_.pop_front();
 		res = *p1 - *p2;
 		this->_stack_.push_front(res);
+		delete(p1);
+		delete(p2);
 	}
 	else
 		throw Error("Sub instruction on empty stack");
@@ -129,6 +142,8 @@ void Parser::op_mul() {
 		this->_stack_.pop_front();
 		res = *p1 * *p2;
 		this->_stack_.push_front(res);
+		delete(p1);
+		delete(p2);
 	}
 	else
 		throw Error("Mul instruction on empty stack");
@@ -146,6 +161,8 @@ void Parser::op_div() {
 		this->_stack_.pop_front();
 		res = *p1 / *p2;
 		this->_stack_.push_front(res);
+		delete(p1);
+		delete(p2);
 	}
 	else
 		throw Error("Div instruction on empty stack");
@@ -163,6 +180,8 @@ void Parser::op_mod() {
 		this->_stack_.pop_front();
 		res = *p1 % *p2;
 		this->_stack_.push_front(res);
+		delete(p1);
+		delete(p2);
 	}
 	else
 		throw Error("Div instruction on empty stack");
@@ -173,6 +192,8 @@ void Parser::op_print() {
 		if (this->_stack_.at(0)->getType() == Int8) {
 			std::cout << static_cast<char>(std::stoi(this->_stack_.at(0)->toString())) << std::endl;
 		}
+		else
+			throw Error("Print only for 8-bit integer value");
 	}
 	else
 		throw  Error("Print on empty stack");
@@ -182,6 +203,8 @@ void Parser::execute() {
 	if (!this->container_.empty())
 	{
 		size_t _size_raw_ = container_.size();
+		if (not findExitInstruction())
+			throw Error("No exit instructions");
 		for (size_t i = 0; i < _size_raw_; i++)
 		{
 			if (this->container_.at(i)[COMMAND] == _commands_[_PUSH]) {
@@ -203,7 +226,7 @@ void Parser::execute() {
 			else if (this->container_.at(i)[COMMAND] == _commands_[_SUB]) {
 				op_sub();
 			}
-			else if (this->container_.at(i)[COMMAND] == _commands_[_MULT]) {
+			else if (this->container_.at(i)[COMMAND] == _commands_[_MUL]) {
 				op_mul();
 			}
 			else if (this->container_.at(i)[COMMAND] == _commands_[_DIV]) {

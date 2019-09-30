@@ -27,6 +27,8 @@ public:
 
 	eOperandType defineType(std::string const &s);
 
+	bool findExitInstruction();
+
 	void execute();
 
 	void op_push(IOperand const * operand);
@@ -60,6 +62,7 @@ private:
 	Container _stack_;
 
 };
-
-
+//TODO деление на ноль ( в случае mod и div), чтение из файла, комментарии типа add ; some shit
+//TODO пофиксить ошибку типа - int8(100) + int8(100) -> overflow, сделать так, чтобы оно хранило его в большем типе после int8 -> int16
+//TODO сделать 2 хедера : 1 для Error месаг, 2 для Общих структур (enum и map)
 #endif //ABSTRACTVM_PARSER_H

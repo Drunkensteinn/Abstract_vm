@@ -41,7 +41,7 @@ void Lexer::define_commands() {
 	commands[_ASSERT] = "assert";
 	commands[_ADD] = "add";
 	commands[_SUB] = "sub";
-	commands[_MULT] = "mult";
+	commands[_MUL] = "mul";
 	commands[_DIV] = "div";
 	commands[_MOD] = "mod";
 	commands[_PRINT] = "print";
@@ -99,7 +99,7 @@ void Lexer::execute() {
             break ;
         }
 		else {
-            if (operation.find(";") != std::string::npos)
+            if (operation.find(";") != std::string::npos or operand.find(";") != std::string::npos)
                 continue;
 
             for (size_t _iter = eLexems::begin; _iter != eLexems::end; _iter++) {
