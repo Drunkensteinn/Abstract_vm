@@ -6829,6 +6829,8 @@ iostream
 -
 Error.h
 /Users/ablizniu/Documents/AbstractVM/inc/Error.h
+Error_messages.h
+/Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
 boost/lexical_cast.hpp
 -
 iomanip
@@ -6867,6 +6869,8 @@ algorithm
 /Users/ablizniu/Documents/AbstractVM/inc/parser.h
 Error.h
 /Users/ablizniu/Documents/AbstractVM/inc/Error.h
+Error_messages.h
+/Users/ablizniu/Documents/AbstractVM/inc/Error_messages.h
 iostream
 -
 stack
@@ -6886,6 +6890,10 @@ boost/any.hpp
 deque
 -
 
+/Users/ablizniu/Documents/AbstractVM/src/lexer.cpp
+../inc/lexer.h
+/Users/ablizniu/Documents/AbstractVM/inc/lexer.h
+
 /Users/ablizniu/Documents/AbstractVM/src/main.cpp
 iostream
 -
@@ -6899,4 +6907,14 @@ boost/lexical_cast.hpp
 /Users/ablizniu/Documents/AbstractVM/inc/parser.h
 ../inc/lexer.h
 /Users/ablizniu/Documents/AbstractVM/inc/lexer.h
+
+/Users/ablizniu/Documents/AbstractVM/src/parser.cpp
+../inc/parser.h
+/Users/ablizniu/Documents/AbstractVM/inc/parser.h
+../inc/lexer.h
+/Users/ablizniu/Documents/AbstractVM/inc/lexer.h
+iostream
+-
+string
+-
 

@@ -1,9 +1,17 @@
-//
-// Created by Andrei BLIZNIUK on 2019-08-19.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:58:46 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/04 21:04:51 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef ABSTRACTVM_LEXER_H
-#define ABSTRACTVM_LEXER_H
+#ifndef LEXER_H
+#define LEXER_H
 
 #include <iostream>
 #include "IOperands.h"
@@ -17,9 +25,17 @@
 #include <vector>
 #include <algorithm>
 
+enum eOpIt
+{
+	_Int8,
+	_Int16,
+	_Int32,
+	_Float,
+	_Double,
+};
+
 enum eLexems
 {
-	begin,
 	_PUSH,
 	_POP,
 	_DUMP,
@@ -31,13 +47,7 @@ enum eLexems
 	_MOD,
 	_PRINT,
 	_EXIT,
-	_Int8,
-	_Int16,
-	_Int32,
-	_Float,
-	_Double,
 	_EOF,
-	end,
 	count = 12,
 };
 
@@ -57,9 +67,11 @@ public:
 
 	const std::map<eLexems, std::string> get_commands(void) const;
 
+	const std::map<eOpIt, std::string> get_operands(void) const;
+
 	void pack_lexems(size_t index, std::string command, std::string operand, std::string value);
 
-	void validate_operand_arg(std::string const &operand, size_t pc);
+	std::string validate_operand_arg(const std::string operand, size_t pc, bool &operand_compared, std::string &__v__);
 
 	std::vector<std::vector<std::string>> const get_lexems() const;
 
@@ -67,6 +79,7 @@ public:
 
 private:
 	std::map<eLexems, std::string> commands;
+	std::map<eOpIt, std::string> operands;
 	std::vector<std::vector<std::string>> lexems;//create a vector of vectors
 	std::ifstream ifile;
 };

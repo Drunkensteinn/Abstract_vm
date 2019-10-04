@@ -1,5 +1,17 @@
-#ifndef ABSTRACTVM_ERROR_H
-#define ABSTRACTVM_ERROR_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:59:19 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/01 17:59:52 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef ERROR_H
+#define ERROR_H
 
 #include <iostream>
 
@@ -20,4 +32,4 @@ private:
 };
 
 
-#endif //ABSTRACTVM_ERROR_H
+#endif

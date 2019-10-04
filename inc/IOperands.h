@@ -1,13 +1,22 @@
-//
-// Created by Andrei BLIZNIUK on 2019-08-19.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   IOperands.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:59:36 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/01 22:43:20 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef ABSTRACTVM_IOPERANDS_H
-#define ABSTRACTVM_IOPERANDS_H
+#ifndef IOPERANDS_H
+#define IOPERANDS_H
 
 #include <iostream>
 
 #include "Error.h"
+#include "Error_messages.h"
 #include <boost/lexical_cast.hpp>
 #include <iomanip>
 #include <sstream>
@@ -60,7 +69,8 @@ public:
 		}
 		return *this;
 	}
-	Operand(std::string const & v, eOperandType type, size_t precision, const CreateOperands * factory): _type(type), _precision(precision), _factory(factory) {
+	Operand(std::string const & v, eOperandType type, size_t precision, const CreateOperands * factory):
+	_type(type), _precision(precision), _factory(factory) {
 		std::stringstream stream;
 
 		stream << std::fixed << std::setprecision(_precision) << v;
@@ -87,7 +97,7 @@ public:
 			}
 		}
 		catch (boost::bad_lexical_cast &e){
-			throw Error(std::string("Error: unknown error"));
+			throw Error(std::string("Error: Overflowing operand ") + std::string(strRepresentation[_type]));
 		}
 	}
 	template <typename U, typename Z>
@@ -98,25 +108,25 @@ public:
 		_value = static_cast<U>(v_);
 	}
 
-	long double const return_operands_floated_point(std::string str) const
+	long double return_operands_floated_point(std::string str) const
 	{
 		long double v_ = 0;
 		try {
 			v_ = std::stold(str);
 		}
 		catch (boost::bad_lexical_cast &e)
-		{throw Error(std::string("Error: overflowed value"));}
+		{throw Error(OVERFLOWED);}
 		return (v_);
 	}
 
-	int64_t const return_operands_fixed_point(std::string const & str) const
+	int64_t return_operands_fixed_point(std::string const & str) const
 	{
 		int64_t v_ = 0;
 		try {
 			v_ = boost::lexical_cast<int64_t>(str);
 		}
 		catch (boost::bad_lexical_cast &e)
-		{throw Error(std::string("Error: overflowed value"));}
+		{throw Error(OVERFLOWED);}
 		return (v_);
 	}
 
@@ -128,132 +138,199 @@ public:
 	eOperandType		getType(void) const 					{ return this->_type; }
 	T const &			get_value(void) const 					{ return this->_value; }
 
+	eOperandType careOverflow(std::string const &v, eOperandType currentType) const {
+		size_t counter = 0;
+
+		if (currentType >= Int8 and currentType <= Int32) {
+			int64_t _v_ = std::abs(boost::lexical_cast<int64_t >(v));
+			while (_v_) {
+				_v_ >>= 1;
+				counter++;
+			}
+			if (counter <= 8) return Int8;
+			else if (counter > 8 and counter <= 16) return Int16;
+			else if (counter > 16 and counter <= 32) return Int32;
+		}
+		return currentType;
+	}
+
+
 	IOperand const * operator+(IOperand const & rhs) const	{
-		const IOperand * ptr = nullptr;
 		std::string _value_;
 		eOperandType _type_ = Int8;
+		std::stringstream stream;
 
 		if (rhs.getPrecision() >= this->_precision)
 		{
 			if (rhs.getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) + this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) +
+						this->return_operands_floated_point(this->toString()));
 			else if (rhs.getType() < Float and rhs.getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) + this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) +
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = rhs.getType();
+			stream << std::fixed << std::setprecision(rhs.getPrecision()) << _value_;
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
 			if (this->getType() >= Float) {
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) + this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) +
+						this->return_operands_floated_point(this->toString()));
 			}
 			else if (this->getType() < Float and this->getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) + this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) +
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = this->getType();
+			stream << std::fixed << std::setprecision(this->_precision) << _value_;
 		}
-		return (this->_factory->createOperand(_type_, _value_));
+		return (this->_factory->createOperand(careOverflow(stream.str(),_type_), stream.str()));
 	}
 	IOperand const * operator-(IOperand const & rhs) const	{
-		const IOperand * ptr = nullptr;
 		std::string _value_;
 		eOperandType _type_ = Int8;
+		std::stringstream stream;
 
 		if (rhs.getPrecision() >= this->_precision)
 		{
 			if (rhs.getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) - this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) -
+						this->return_operands_floated_point(this->toString()));
 			else if (rhs.getType() < Float and rhs.getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) - this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) -
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = rhs.getType();
+			stream << std::fixed << std::setprecision(rhs.getPrecision()) << _value_;
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
 			if (this->getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) - this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) -
+						this->return_operands_floated_point(this->toString()));
 			else if (this->getType() < Float and this->getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) - this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) -
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = this->getType();
+			stream << std::fixed << std::setprecision(this->getPrecision()) << _value_;
 		}
-		return (this->_factory->createOperand(_type_, _value_));
+		return (this->_factory->createOperand(careOverflow(stream.str(),_type_), stream.str()));
 	}
 	IOperand const * operator*(IOperand const & rhs) const	{
-		const IOperand * ptr = nullptr;
 		std::string _value_;
 		eOperandType _type_ = Int8;
+		std::stringstream stream;
 
 		if (rhs.getPrecision() >= this->_precision)
 		{
 			if (rhs.getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) * this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) *
+						this->return_operands_floated_point(this->toString()));
 			else if (rhs.getType() < Float and rhs.getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) * this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) *
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = rhs.getType();
+			stream << std::fixed << std::setprecision(rhs.getPrecision()) << _value_;
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
 			if (this->getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) * this->return_operands_floated_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) *
+						this->return_operands_floated_point(this->toString()));
 			else if (this->getType() < Float and this->getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) * this->return_operands_fixed_point(this->toString()));
+				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) *
+						this->return_operands_fixed_point(this->toString()));
 			_type_ = this->getType();
+			stream << std::fixed << std::setprecision(this->getPrecision()) << _value_;
 		}
-		return (this->_factory->createOperand(_type_, _value_));
+		return (this->_factory->createOperand(careOverflow(stream.str(),_type_), stream.str()));
 	}
+
+	std::string const  unify_div(IOperand const & rhs) const
+	{
+		long double	__d0;
+		long double	__d1;
+		int64_t		__i0;
+		int64_t		__i1;
+
+		if (rhs.getType() >= Float) {
+			__d0 = this->return_operands_floated_point(rhs.toString());
+			__d1 = this->return_operands_floated_point(this->toString());
+			if (__d0 == 0 or __d1 == 0)
+				throw Error(DIVISION_ZERO);
+			return (std::to_string(__d0 / __d1));
+		}
+		else if (rhs.getType() < Float and rhs.getType() >= Int8) {
+
+			__i0 = this->return_operands_fixed_point(rhs.toString());
+			__i1 = this->return_operands_fixed_point(this->toString());
+			if (__i0 == 0 or __i1 == 0)
+				throw Error(DIVISION_ZERO);
+			return (std::to_string(__i0 / __i1));
+		}
+		return (nullptr);
+	}
+
 	IOperand const * operator/(IOperand const & rhs) const	{
-		const IOperand * ptr = nullptr;
 		std::string _value_;
 		eOperandType _type_ = Int8;
+		std::stringstream stream;
 
 		if (rhs.getPrecision() >= this->_precision)
 		{
-			if (rhs.getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) / this->return_operands_floated_point(this->toString()));
-			else if (rhs.getType() < Float and rhs.getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) / this->return_operands_fixed_point(this->toString()));
+			_value_ = unify_div(rhs);
 			_type_ = rhs.getType();
+			stream << std::fixed << std::setprecision(rhs.getPrecision()) << _value_;
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
-			if (this->getType() >= Float)
-				_value_ = std::to_string(this->return_operands_floated_point(rhs.toString()) / this->return_operands_floated_point(this->toString()));
-			else if (this->getType() < Float and this->getType() >= Int8)
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) / this->return_operands_fixed_point(this->toString()));
+			_value_ = unify_div(rhs);
 			_type_ = this->getType();
+			stream << std::fixed << std::setprecision(this->getPrecision()) << _value_;
 		}
-		return (this->_factory->createOperand(_type_, _value_));
+		return (this->_factory->createOperand(careOverflow(stream.str(),_type_), stream.str()));
 	}
 	IOperand const * operator%(IOperand const & rhs) const	{
-		const IOperand * ptr = nullptr;
 		std::string _value_;
+		int64_t		__i0;
+		int64_t 	__i1;
 		eOperandType _type_ = Int8;
+		std::stringstream stream;
 
 		if (rhs.getPrecision() >= this->_precision)
 		{
 			if (rhs.getType() < Float and rhs.getType() >= Int8) {
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) %
-										 this->return_operands_fixed_point(this->toString()));
+				__i0 = this->return_operands_fixed_point(rhs.toString());
+				__i1 = this->return_operands_fixed_point(this->toString());
+				if (__i0 == 0 or __i1 == 0)
+					throw Error(DIVISION_ZERO);
+				_value_ = std::to_string(__i0 % __i1);
 				_type_ = rhs.getType();
+				stream << std::fixed << std::setprecision(rhs.getPrecision()) << _value_;
 			}
 			else if (rhs.getType() >= Float)
-				throw Error("Mod instruction on floated point value");
+				throw Error(MOD_FP_ERROR);
 		}
 		else if (rhs.getPrecision() < this->_precision)
 		{
 			if (this->getType() < Float and this->getType() >= Int8)
 			{
-				_value_ = std::to_string(this->return_operands_fixed_point(rhs.toString()) %
-						this->return_operands_fixed_point(this->toString()));
+				__i0 = this->return_operands_fixed_point(rhs.toString());
+				__i1 = this->return_operands_fixed_point(this->toString());
+				if (__i0 == 0 or __i1 == 0)
+					throw Error(DIVISION_ZERO);
+				_value_ = std::to_string(__i0 % __i1);
 				_type_ = this->getType();
+				stream << std::fixed << std::setprecision(this->getPrecision()) << _value_;
 			}
 			else if (this->getType() >= Float)
-				throw Error("Mod instruction on floated point value");
+				throw Error(MOD_FP_ERROR);
 		}
-		return (this->_factory->createOperand(_type_, _value_));
+		return (this->_factory->createOperand(careOverflow(stream.str(),_type_), stream.str()));
 	}
 	~Operand() {};
 private:
 	eOperandType			_type;
 	T						_value;
-	size_t					_precision;
+	int32_t					_precision;
 	const CreateOperands	*_factory;
 	std::string				__v__;
 };

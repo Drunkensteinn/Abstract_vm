@@ -1,9 +1,18 @@
-//
-// Created by Andrei BLIZNIUK on 2019-08-19.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:58:39 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/04 21:16:18 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 
 #include "../inc/lexer.h"
-
 
 Lexer::Lexer() {}
 
@@ -34,7 +43,6 @@ Lexer::Lexer(int argc, char **argv) {
 }
 
 void Lexer::define_commands() {
-	commands[begin] = "";
 	commands[_PUSH] = "push";
 	commands[_POP] = "pop";
 	commands[_DUMP] = "dump";
@@ -46,13 +54,11 @@ void Lexer::define_commands() {
 	commands[_MOD] = "mod";
 	commands[_PRINT] = "print";
 	commands[_EXIT] = "exit";
-	commands[_Int8] = "int8";
-	commands[_Int16] = "int16";
-	commands[_Int32] = "int32";
-	commands[_Float] = "float";
-	commands[_Double] = "double";
-	commands[_EOF] = "";
-	commands[end] = "\0";
+	operands[_Int8] = "int8";
+	operands[_Int16] = "int16";
+	operands[_Int32] = "int32";
+	operands[_Float] = "float";
+	operands[_Double] = "double";
 }
 
 std::vector<std::vector<std::string>> const Lexer::get_lexems() const {
@@ -63,67 +69,100 @@ const std::map<eLexems, std::string> Lexer::get_commands(void) const {
 	return (this->commands);
 }
 
+const std::map<eOpIt, std::string> Lexer::get_operands(void) const {
+	return this->operands;
+}
+
 void Lexer::pack_lexems(size_t index, std::string command, std::string operand, std::string value) {
     this->lexems.resize(index + 1);
     this->lexems.at(index).push_back(command);
     this->lexems.at(index).push_back(operand);
     this->lexems.at(index).push_back(value);
+    if (value.find(";") != std::string::npos)
+    	throw Error("\nSyntax error: value " + value + " has invalid format");
 }
 
-void Lexer::validate_operand_arg(std::string const &operand, size_t pc) {
+std::string
+Lexer::validate_operand_arg(const std::string operand, size_t pc, bool &operand_compared, std::string &__v__) {
     size_t n1;
     size_t n2;
+    std::string s;
 
     n1 = std::count(operand.begin(), operand.end(), ')');
     n2 = std::count(operand.begin(), operand.end(), '(');
 
-    if (n1 > 1 or n2 > 1)
-        throw Error(std::string("Syntax error: Line: " + std::to_string(pc) + ": Operand ") +
-        operand + std::string(" has invalid argument format"));
+    for (size_t _iter = eOpIt::_Int8; _iter != eOpIt::_Double; _iter++) {
+    	eOpIt it;
+
+    	it = static_cast<eOpIt>(_iter);
+		if (operand.find(operands.at(it)) != std::string::npos) {
+			if (operand.find(";") == operand.size() - 1 or operand.find(";") == std::string::npos) {
+				operand_compared = true;
+				s = operands.at(it);
+				__v__ = operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1);
+			}
+			else
+				throw Error(std::string("\nSyntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand's value format"));
+		}
+	}
+    if (n2 or n1) {
+    	if (((n2 >= 1 and !n1) or (n1 >= 1 and !n2)) or (n2 > 1 or n1 > 1))
+			throw Error(std::string("\nSyntax error: Line: " + std::to_string(pc) + ": Operand ") + operand + std::string(" has invalid argument format"));
+	}
+    return (s);
 }
+
+//TODO добить КЕЙС push int8(-5);fuck this shit все остальное норм, парс входящей строки
+
 
 void Lexer::execute() {
 	define_commands();
 	std::string line;
     size_t pc = 1;
-	while (std::getline((ifile.is_open() ? (ifile) : (std::cin)), line))
-	{
-		std::istringstream  StringStream(line);
+	while (std::getline((ifile.is_open() ? (ifile) : (std::cin)), line)) {
+		std::istringstream StringStream(line);
 		std::string operation;
 		std::string operand;
+		std::string value;
+		std::string to_pack_operations;
+		std::string to_pack_operand;
 		bool compared_operation = false;
 		bool compared_operand = false;
 
-        StringStream >> operation >> operand;
-		if (operation == ";;") {
-            break ;
-        }
+		StringStream >> operation >> operand;
+
+		if (operation.find(";;") != std::string::npos)
+			break ;
+		else if (operation.find(";") == 0)
+			continue ;
 		else {
-            if (operation.find(";") != std::string::npos or operand.find(";") != std::string::npos)
-                continue;
+			for (size_t _iter = eLexems::_PUSH; _iter != eLexems::_EOF; _iter++) {
+				eLexems it;
 
-            for (size_t _iter = eLexems::begin; _iter != eLexems::end; _iter++) {
-                eLexems it;
-
-                it = static_cast<eLexems>(_iter);
-                if (commands.at(it) == operation)
-                    compared_operation = true;
-                if (commands.at(it) == operand.substr(0, operand.find("(")))
-                {
-                    validate_operand_arg(operand, pc);
-                    compared_operand = true;
-                }
-            }
+				it = static_cast<eLexems>(_iter);
+				if (operation.find(commands.at(it)) != std::string::npos) {
+					if (commands.at(it) == "push" or commands.at(it) == "assert") {
+						if (operation.empty() or operation.find(";") != std::string::npos)
+							throw Error(std::string("\nSyntax error: Line: " + std::to_string(pc) + ": Operand ") + operand + std::string(" has invalid format"));
+						to_pack_operand = validate_operand_arg(operand, pc, compared_operand, value);
+						compared_operation = true;
+					}
+					else if (operation.find(";") == operation.size() - 1 or operation.find(";") == std::string::npos) {
+						to_pack_operations = commands.at(it);
+						compared_operand = true;
+						compared_operation = true;
+					}
+				}
+			}
             if (not compared_operation)
-                throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) +
+                throw Error(std::string("\nSyntax error: Line: ") + std::to_string(pc) +
                             std::string(": unknown instruction: ") + operation);
             else if (not compared_operand)
-                throw Error(std::string("Syntax error: Line: ") + std::to_string(pc) +
-                            std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
+                throw Error(std::string("\nSyntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
             else
-                pack_lexems(pc - 1, operation, operand.substr(0, operand.find("(")),
-                            operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1));
+                pack_lexems(pc - 1, to_pack_operations, to_pack_operand, value);
         }
 		pc++;
 	}
 }
+

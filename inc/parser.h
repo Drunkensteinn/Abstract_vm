@@ -1,7 +1,20 @@
-#ifndef ABSTRACTVM_PARSER_H
-#define ABSTRACTVM_PARSER_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 18:02:55 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/01 18:03:12 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PARSER_H
+#define PARSER_H
 
 #include "Error.h"
+#include "Error_messages.h"
 #include <iostream>
 #include <stack>
 #include <vector>
@@ -53,16 +66,13 @@ public:
 
 	void op_exit() const;
 
-
 private:
 	const CreateOperands *_factory_ = nullptr;
 	std::vector<std::vector<std::string>> container_;
 	std::map<eLexems, std::string> _commands_;
+	std::map<eOpIt, std::string> _operands_;
 
 	Container _stack_;
 
 };
-//TODO деление на ноль ( в случае mod и div), чтение из файла, комментарии типа add ; some shit
-//TODO пофиксить ошибку типа - int8(100) + int8(100) -> overflow, сделать так, чтобы оно хранило его в большем типе после int8 -> int16
-//TODO сделать 2 хедера : 1 для Error месаг, 2 для Общих структур (enum и map)
-#endif //ABSTRACTVM_PARSER_H
+#endif

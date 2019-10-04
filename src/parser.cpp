@@ -1,6 +1,14 @@
-//
-// Created by Andrei BLIZNIUK on 2019-08-19.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:58:09 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/04 14:47:07 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/parser.h"
 #include "../inc/lexer.h"
@@ -11,7 +19,6 @@
 #define OPERAND 1
 #define VALUE 2
 
-
 Parser::Parser() {}
 
 Parser::~Parser() {}
@@ -19,6 +26,7 @@ Parser::~Parser() {}
 Parser::Parser(IVirtualMachine * lexer): _factory_(new CreateOperands) {
 	this->container_ = dynamic_cast<Lexer *>(lexer)->get_lexems();
 	this->_commands_ = dynamic_cast<Lexer *>(lexer)->get_commands();
+	this->_operands_ = dynamic_cast<Lexer *>(lexer)->get_operands();
 }
 
 Parser::Parser(Parser const &p) {
@@ -43,22 +51,21 @@ bool Parser::findExitInstruction() {
 
 eOperandType Parser::defineType(std::string const &s)
 {
-	if (s == this->_commands_[_Int8])
+	if (s == this->_operands_[_Int8])
 		return Int8;
-	else if (s == this->_commands_[_Int16])
+	else if (s == this->_operands_[_Int16])
 		return Int16;
-	else if (s == this->_commands_[_Int32])
+	else if (s == this->_operands_[_Int32])
 		return Int32;
-	else if (s == this->_commands_[_Float])
+	else if (s == this->_operands_[_Float])
 		return Float;
-	else if (s == this->_commands_[_Double])
+	else if (s == this->_operands_[_Double])
 		return Double;
 	else
-		throw Error("Error: Invalid Operand type");
+		throw Error(INVALID_OPERADN);
 }
 
 void Parser::op_exit() const {
-	::system("leaks AbstractVM");
 	::exit(0);
 }
 
@@ -71,12 +78,12 @@ void Parser::op_pop() {
 		this->_stack_.pop_front();
 	}
 	else
-		throw Error("Pop on empty stack");
+		throw Error(POP_EMPTY);
 }
 
 void Parser::op_dump() const {
 	for (size_t i = 0; i < this->_stack_.size(); i++) {
-		std::cout << this->_stack_.at(i)->toString() << std::endl;
+		std::cout << std::setprecision(this->_stack_.at(i)->getPrecision()) << this->_stack_.at(i)->toString() << std::endl;
 	}
 }
 
@@ -88,7 +95,7 @@ void Parser::op_assert(std::string const &s) {
 	l2 = boost::lexical_cast<long double>(this->_stack_.at(0)->toString());
 
 	if (l1 != l2)
-		throw Error("Error: assert failed");
+		throw Error(ASSERT_FAILED);
 }
 
 void Parser::op_add() {
@@ -107,7 +114,7 @@ void Parser::op_add() {
 		delete(p2);
 	}
 	else
-		throw Error("Add instruction on empty stack");
+		throw Error(ADD_EMPTY);
 }
 
 
@@ -127,7 +134,7 @@ void Parser::op_sub() {
 		delete(p2);
 	}
 	else
-		throw Error("Sub instruction on empty stack");
+		throw Error(SUB_EMPTY);
 }
 
 void Parser::op_mul() {
@@ -146,7 +153,7 @@ void Parser::op_mul() {
 		delete(p2);
 	}
 	else
-		throw Error("Mul instruction on empty stack");
+		throw Error(MUL_EMPTY);
 }
 
 void Parser::op_div() {
@@ -165,7 +172,7 @@ void Parser::op_div() {
 		delete(p2);
 	}
 	else
-		throw Error("Div instruction on empty stack");
+		throw Error(DIV_EMPTY);
 }
 
 void Parser::op_mod() {
@@ -184,7 +191,7 @@ void Parser::op_mod() {
 		delete(p2);
 	}
 	else
-		throw Error("Div instruction on empty stack");
+		throw Error(MOD_EMPTY);
 }
 
 void Parser::op_print() {
@@ -193,10 +200,10 @@ void Parser::op_print() {
 			std::cout << static_cast<char>(std::stoi(this->_stack_.at(0)->toString())) << std::endl;
 		}
 		else
-			throw Error("Print only for 8-bit integer value");
+			throw Error(PRINT_ERROR);
 	}
 	else
-		throw  Error("Print on empty stack");
+		throw  Error(PRINT_EMPTY);
 }
 
 void Parser::execute() {
@@ -204,12 +211,12 @@ void Parser::execute() {
 	{
 		size_t _size_raw_ = container_.size();
 		if (not findExitInstruction())
-			throw Error("No exit instructions");
+			throw Error(NO_EXIT);
 		for (size_t i = 0; i < _size_raw_; i++)
 		{
 			if (this->container_.at(i)[COMMAND] == _commands_[_PUSH]) {
 				op_push(_factory_->createOperand(defineType(this->container_.at(i)[OPERAND]),
-						this->container_.at(i)[VALUE]));
+					this->container_.at(i)[VALUE]));
 			}
 			else if (this->container_.at(i)[COMMAND] == _commands_[_POP]) {
 				op_pop();
@@ -244,5 +251,6 @@ void Parser::execute() {
 		}
 	}
 	else
-		throw Error("Empty operation's stack");
+		throw Error(NO_ELEMS_CONTAINER);
 }
+

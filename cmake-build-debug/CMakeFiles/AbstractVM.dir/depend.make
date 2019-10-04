@@ -616,6 +616,7 @@ CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: /Users/ablizniu/.brew/Cellar/b
 CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: /Users/ablizniu/.brew/Cellar/boost/1.71.0/include/boost/utility/identity_type.hpp
 CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: /Users/ablizniu/.brew/Cellar/boost/1.71.0/include/boost/version.hpp
 CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: ../inc/Error.h
+CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: ../inc/Error_messages.h
 CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: ../inc/IOperands.h
 CMakeFiles/AbstractVM.dir/src/FabricMethod.cpp.o: ../src/FabricMethod.cpp
 

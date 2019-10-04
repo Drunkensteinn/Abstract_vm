@@ -1,5 +1,16 @@
-#include "../inc/IOperands.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   FabricMethod.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/01 17:59:00 by ablizniu          #+#    #+#             */
+/*   Updated: 2019/10/01 17:59:00 by ablizniu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../inc/IOperands.h"
 
 CreateOperands::CreateOperands() {
 	factory.push_back(&CreateOperands::createInt8);
