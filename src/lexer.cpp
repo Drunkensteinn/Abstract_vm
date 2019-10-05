@@ -6,7 +6,7 @@
 /*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/01 17:58:39 by ablizniu          #+#    #+#             */
-/*   Updated: 2019/10/04 21:16:18 by ablizniu         ###   ########.fr       */
+/*   Updated: 2019/10/05 16:36:05 by ablizniu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,36 +91,29 @@ Lexer::validate_operand_arg(const std::string operand, size_t pc, bool &operand_
     n1 = std::count(operand.begin(), operand.end(), ')');
     n2 = std::count(operand.begin(), operand.end(), '(');
 
-    for (size_t _iter = eOpIt::_Int8; _iter != eOpIt::_Double; _iter++) {
-    	eOpIt it;
-
-    	it = static_cast<eOpIt>(_iter);
-		if (operand.find(operands.at(it)) != std::string::npos) {
-			if (operand.find(";") == operand.size() - 1 or operand.find(";") == std::string::npos) {
-				operand_compared = true;
-				s = operands.at(it);
-				__v__ = operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1);
-			}
-			else
-				throw Error(std::string("\nSyntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand's value format"));
-		}
+	if (n2 or n1) {
+		if (((n2 >= 1 and !n1) or (n1 >= 1 and !n2)) or (n2 > 1 or n1 > 1))
+			throw Error(std::string("\nSyntax error: Line: " + std::to_string(pc) +
+			": Operand ") + operand + std::string(" has invalid argument format"));
 	}
-    if (n2 or n1) {
-    	if (((n2 >= 1 and !n1) or (n1 >= 1 and !n2)) or (n2 > 1 or n1 > 1))
-			throw Error(std::string("\nSyntax error: Line: " + std::to_string(pc) + ": Operand ") + operand + std::string(" has invalid argument format"));
+
+    for (size_t _iter = eOpIt::_Int8; _iter != eOpIt::_end; _iter++) {
+		eOpIt it = static_cast<eOpIt>(_iter);
+		if (operand.find(operands.at(it)) != std::string::npos) {
+			s = operands.at(it);
+			__v__ = operand.substr(operand.find("(") + 1, operand.find(")") - operand.find("(") - 1);
+			operand_compared = true;
+		}
 	}
     return (s);
 }
-
-//TODO добить КЕЙС push int8(-5);fuck this shit все остальное норм, парс входящей строки
-
 
 void Lexer::execute() {
 	define_commands();
 	std::string line;
     size_t pc = 1;
 	while (std::getline((ifile.is_open() ? (ifile) : (std::cin)), line)) {
-		std::istringstream StringStream(line);
+		std::istringstream StringStream(line.substr(0, line.find(";")));
 		std::string operation;
 		std::string operand;
 		std::string value;
@@ -131,26 +124,23 @@ void Lexer::execute() {
 
 		StringStream >> operation >> operand;
 
-		if (operation.find(";;") != std::string::npos)
+		if (line == ";;")
 			break ;
-		else if (operation.find(";") == 0)
-			continue ;
-		else {
+		else if (not operation.empty() or not operand.empty()) {
 			for (size_t _iter = eLexems::_PUSH; _iter != eLexems::_EOF; _iter++) {
 				eLexems it;
 
 				it = static_cast<eLexems>(_iter);
 				if (operation.find(commands.at(it)) != std::string::npos) {
 					if (commands.at(it) == "push" or commands.at(it) == "assert") {
-						if (operation.empty() or operation.find(";") != std::string::npos)
-							throw Error(std::string("\nSyntax error: Line: " + std::to_string(pc) + ": Operand ") + operand + std::string(" has invalid format"));
 						to_pack_operand = validate_operand_arg(operand, pc, compared_operand, value);
-						compared_operation = true;
-					}
-					else if (operation.find(";") == operation.size() - 1 or operation.find(";") == std::string::npos) {
 						to_pack_operations = commands.at(it);
-						compared_operand = true;
 						compared_operation = true;
+
+					} else {
+						to_pack_operations = commands.at(it);
+						compared_operation = true;
+						compared_operand = true;
 					}
 				}
 			}
@@ -161,8 +151,8 @@ void Lexer::execute() {
                 throw Error(std::string("\nSyntax error: Line: ") + std::to_string(pc) + std::string(": unknown operand type: ") + operand.substr(0, operand.find("(")));
             else
                 pack_lexems(pc - 1, to_pack_operations, to_pack_operand, value);
+			pc++;
         }
-		pc++;
 	}
 }
 

@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 
-NAME		=	avm
+NAME		=	AbstractVM
 FLAGS		= 	-Wall -Werror -Wextra
 COMPILER	=	g++ -std=c++11
 
@@ -45,20 +45,20 @@ obj:
 
 $(NAME): $(OBJ)
 	@$(COMPILER) -o $(NAME) $(OBJ)
-	@echo "Compiling" [ $(NAME) ]
+	@echo "Compile " $(NAME)
 
 $(DIR_OBJ)%.o: $(DIR_SRC)%.cpp $(INC_PATH)
 	@$(COMPILER) $(FLAGS) $(INC) -c -o $@ $< -I ~/.brew/Cellar/boost/1.71.0/include/
-	@echo "Linking" [ $< ]
+	@echo "Link " $<
 
 clean:
 	@rm -rf $(DIR_OBJ)
-	@echo "Clean [ obj files avm ]"
+	@echo "Clean obj files AbstractVM"
 
 fclean:
 	@rm -rf $(DIR_OBJ)
-	@echo "Clean [ obj files avm ]"
+	@echo "Clean obj files AbstractVM"
 	@rm -f $(NAME)
-	@echo "Clean" [ $(NAME) ]
+	@echo "Clean " $(NAME)
 
 re: fclean all
